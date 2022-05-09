@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 
-@Controller('users')
-export class UserController {
+@Resolver()
+export class UserResolver {
 	constructor(private readonly userService: UserService) {}
 
-	@Get()
-	async getAll() {
+	@Query(() => String)
+	async users() {
 		return this.userService.getAll();
 	}
 }
