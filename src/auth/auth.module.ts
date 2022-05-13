@@ -7,10 +7,12 @@ import { UserModule } from '@app/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJWTConfig } from '@app/configs/jwt.config';
+import { JwtStrategy } from './strategies/jwt.strategies';
 
 @Module({
 	imports: [
 		UserModule,
+		ConfigModule,
 		TypeOrmModule.forFeature([UserEntity]),
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
@@ -18,6 +20,6 @@ import { getJWTConfig } from '@app/configs/jwt.config';
 			useFactory: getJWTConfig,
 		}),
 	],
-	providers: [AuthService, AuthResolver],
+	providers: [AuthService, AuthResolver, JwtStrategy],
 })
 export class AuthModule {}

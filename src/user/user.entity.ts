@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { genSalt, hash } from 'bcrypt';
 import {
 	BeforeInsert,
@@ -16,6 +16,11 @@ export enum UserRole {
 	EDITOR = 'editor',
 	STUDENT = 'student',
 }
+
+registerEnumType(UserRole, {
+	name: 'UserRole',
+	description: 'User roles',
+});
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -44,7 +49,7 @@ export class UserEntity {
 	@Column({ default: '' })
 	avatarPath: string;
 
-	@Field()
+	@Field(() => UserRole)
 	@Column({
 		type: 'enum',
 		enum: UserRole,

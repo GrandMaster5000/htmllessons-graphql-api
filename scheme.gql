@@ -9,7 +9,7 @@ type UserEntity {
   username: String!
   description: String!
   avatarPath: String!
-  role: String!
+  role: UserRole!
   country: String!
   socialLink: String!
   rememberToken: String!
@@ -17,6 +17,13 @@ type UserEntity {
   isRealTime: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+"""User roles"""
+enum UserRole {
+  ADMIN
+  EDITOR
+  STUDENT
 }
 
 """
@@ -31,7 +38,7 @@ type AuthUser {
   username: String!
   description: String!
   avatarPath: String!
-  role: String!
+  role: UserRole!
   country: String!
   socialLink: String!
   rememberToken: String!

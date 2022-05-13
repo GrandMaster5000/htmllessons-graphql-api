@@ -78,14 +78,14 @@ export class AuthService {
 	}
 
 	async issueTokenPair({ id, email }: Pick<UserEntity, 'id' | 'email'>): Promise<TokenPair> {
-		const data = { id: id, email };
+		const data: Pick<UserType, 'id' | 'email'> = { id: id, email };
 
 		const refreshToken = await this.jwtService.signAsync(data, {
-			expiresIn: '15d',
+			expiresIn: '30d',
 		});
 
 		const accessToken = await this.jwtService.signAsync(data, {
-			expiresIn: '1h',
+			expiresIn: '3h',
 		});
 
 		return { refreshToken, accessToken };
