@@ -1,11 +1,15 @@
-import { Field } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { genSalt, hash } from 'bcrypt';
 import {
+	BeforeInsert,
 	Column,
 	CreateDateColumn,
 	Entity,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export enum UserRole {
 	ADMIN = 'admin',
@@ -13,30 +17,27 @@ export enum UserRole {
 	STUDENT = 'student',
 }
 
+@ObjectType()
 @Entity({ name: 'user' })
 export class UserEntity {
-	@Field()
+	@Field((type) => ID)
 	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Field()
-	@Column()
+	@Column({ unique: true })
 	email: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@Column({ select: false })
 	password: string;
 
 	@Field()
-	@Column()
-	firstName: string;
+	@Column({ unique: true })
+	username: string;
 
 	@Field()
-	@Column()
-	lastName: string;
-
-	@Field()
-	@Column('text')
+	@Column('text', { default: '' })
 	description: string;
 
 	@Field()
@@ -52,15 +53,15 @@ export class UserEntity {
 	role: UserRole;
 
 	@Field()
-	@Column()
+	@Column({ default: '' })
 	country: string;
 
 	@Field()
-	@Column()
+	@Column({ default: '' })
 	socialLink: string;
 
 	@Field()
-	@Column()
+	@Column({ nullable: true })
 	rememberToken: string;
 
 	@Field()
@@ -78,4 +79,10 @@ export class UserEntity {
 	@Field()
 	@UpdateDateColumn({ type: 'timestamp' })
 	updatedAt: Date;
+
+	@BeforeInsert()
+	async hashPassword(): Promise<void> {
+		const salt = await genSalt(+process.env.SALT);
+		this.password = await hash(this.password, +salt);
+	}
 }

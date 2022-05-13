@@ -1,3 +1,4 @@
+import { UserEntity } from '@app/user/user.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -9,7 +10,7 @@ const getOrmConfig: TypeOrmModuleOptions = {
 	username: process.env.DATABASE_USERNAME,
 	password: process.env.DATABASE_PASSWORD,
 	database: process.env.DATABASE_NAME,
-	entities: [__dirname + '\\**\\*.entity{.ts,.js}'],
+	entities: [UserEntity],
 	migrations: [__dirname + '\\migrations\\**\\*{.ts,.js}'],
 	synchronize: true,
 	cli: {

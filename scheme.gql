@@ -2,6 +2,57 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserEntity {
+  id: ID!
+  email: String!
+  password: String
+  username: String!
+  description: String!
+  avatarPath: String!
+  role: String!
+  country: String!
+  socialLink: String!
+  rememberToken: String!
+  isVerified: Boolean!
+  isRealTime: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AuthUser {
+  id: ID!
+  email: String!
+  password: String
+  username: String!
+  description: String!
+  avatarPath: String!
+  role: String!
+  country: String!
+  socialLink: String!
+  rememberToken: String!
+  isVerified: Boolean!
+  isRealTime: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  refreshToken: String!
+  accessToken: String!
+}
+
 type Query {
-  getAll: String!
+  login(email: String!, password: String!): AuthUser!
+  getNewTokens(refreshToken: String!): AuthUser!
+  users: [UserEntity!]!
+}
+
+type Mutation {
+  register(data: RegisterUserInput!): AuthUser!
+}
+
+input RegisterUserInput {
+  username: String!
 }

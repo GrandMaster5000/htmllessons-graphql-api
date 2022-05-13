@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -18,11 +16,10 @@ import getOrmConfig from '@app/configs/orm.config';
 			debug: true,
 			playground: true,
 			autoSchemaFile: 'scheme.gql',
+			useGlobalPrefix: true,
 		}),
 		ConfigModule.forRoot(),
 		TypeOrmModule.forRoot(getOrmConfig),
 	],
-	controllers: [AppController],
-	providers: [AppService],
 })
 export class AppModule {}
