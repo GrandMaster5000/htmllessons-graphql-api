@@ -52,8 +52,9 @@ type AuthUser {
 
 type Query {
   login(email: String!, password: String!): AuthUser!
-  getNewTokens(refreshToken: String!): AuthUser!
+  getNewTokens: AuthUser!
   users: [UserEntity!]!
+  user: UserEntity!
 }
 
 type Mutation {
@@ -61,5 +62,7 @@ type Mutation {
 }
 
 input RegisterUserInput {
+  email: String!
+  password: String!
   username: String!
 }

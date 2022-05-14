@@ -13,7 +13,6 @@ import {
 	USER_EMAIL_NOT_FOUND,
 } from './auth.constants';
 import { LoginUserArgs } from './inputs/login-user.args';
-import { RefreshTokenArgs } from './inputs/refreash-token.args';
 import { RegisterUserInput } from './inputs/register-user.input';
 import { TokenPair } from './types/token-pair.interface';
 import { UserAndTokens } from './types/user-and-tokens.type';
@@ -91,7 +90,7 @@ export class AuthService {
 		return { refreshToken, accessToken };
 	}
 
-	async getNewTokens({ refreshToken }: RefreshTokenArgs): Promise<UserAndTokens> {
+	async getNewTokens(refreshToken: string): Promise<UserAndTokens> {
 		if (!refreshToken) throw new UnauthorizedException(SIGN_IN_ERROR);
 
 		const result = await this.jwtService.verifyAsync(refreshToken);

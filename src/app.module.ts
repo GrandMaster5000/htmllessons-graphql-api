@@ -17,6 +17,10 @@ import getOrmConfig from '@app/configs/orm.config';
 			playground: true,
 			autoSchemaFile: 'scheme.gql',
 			useGlobalPrefix: true,
+			cors: {
+				credentials: true,
+				origin: true,
+			},
 		}),
 		ConfigModule.forRoot(),
 		TypeOrmModule.forRoot(getOrmConfig),

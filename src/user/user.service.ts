@@ -15,7 +15,10 @@ export class UserService {
 	async createUser(input: RegisterUserInput): Promise<UserType> {
 		const { email, password, username } = input;
 
-		const oldUser = await this.userRepository.findOne({ email: email.trim() });
+		const oldUser = await this.userRepository
+			.createQueryBuilder('u')
+			.where('u.email = :email OR u.username = :username', { email, username })
+			.getOne();
 
 		if (oldUser) {
 			throw new BadRequestException(USER_ALRERADY_EXIST);

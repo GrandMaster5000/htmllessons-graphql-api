@@ -1,7 +1,7 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlContext } from '@app/types/gql-context.interface';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginUserArgs } from './inputs/login-user.args';
-import { RefreshTokenArgs } from './inputs/refreash-token.args';
 import { RegisterUserInput } from './inputs/register-user.input';
 import { AuthUser } from './outputs/auth-user.output';
 import { UserAndTokens } from './types/user-and-tokens.type';
@@ -21,7 +21,8 @@ export class AuthResolver {
 	}
 
 	@Query(() => AuthUser)
-	async getNewTokens(@Args() { refreshToken }: RefreshTokenArgs): Promise<UserAndTokens> {
-		return this.authService.getNewTokens({ refreshToken });
+	async getNewTokens(@Context() { req }: GqlContext): Promise<UserAndTokens> {
+		const refreshToken = req.cookies?.refreshToken;
+		return this.authService.getNewTokens(refreshToken);
 	}
 }

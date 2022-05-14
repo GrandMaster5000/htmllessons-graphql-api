@@ -1,19 +1,22 @@
-import { UserType } from '@app/user/types/user.type';
+import { IExpressRequest } from '@app/types/express-request.interface';
 import { UserRole } from '@app/user/user.entity';
-import { CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { DONT_HAVE_ACCESS } from '../auth.constants';
 
+@Injectable()
 export class RolesGuard implements CanActivate {
 	constructor(private reflector: Reflector) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		const roles = this.reflector.get<UserRole[]>('roles', context.getHandler());
+		const ctx = GqlExecutionContext.create(context);
+		const roles = this.reflector.get<UserRole[]>('roles', ctx.getHandler());
 		if (!roles) {
 			return true;
 		}
 
-		const req = context.switchToHttp().getRequest<{ user: UserType }>();
+		const req: IExpressRequest = ctx.getContext().req;
 		const user = req.user;
 
 		const isAccess = roles.includes(user.role);
